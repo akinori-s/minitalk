@@ -23,14 +23,14 @@ SERVER		:= server
 B_SRCS_DIR	:= bonus/
 B_C_SRCS		:= client_bonus.c
 B_S_SRCS		:= server_bonus.c
-B_C_SRCS		:= $(addprefix $(SRCS_DIR), $(C_SRCS))
-B_S_SRCS		:= $(addprefix $(SRCS_DIR), $(S_SRCS))
+B_C_SRCS		:= $(addprefix $(B_SRCS_DIR), $(B_C_SRCS))
+B_S_SRCS		:= $(addprefix $(B_SRCS_DIR), $(B_S_SRCS))
 
-B_NAME		:=	minitalk_bonus
-B_CLIENT	:= client_bonus
-B_SERVER	:= server_bonus
+B_NAME		:= minitalk_bonus
+B_CLIENT	:= b_client
+B_SERVER	:= b_server
 
-LIBFT		:= ./libft/libft.a
+LIBFT			:= ./libft/libft.a
 LIBFT_INCLDIR	:= -I ./libft
 PF_INCLDIR		:= -I ./libft/ft_printf_includes
 
@@ -52,12 +52,11 @@ ${LIBFT}:
 	$(MAKE) -C ./libft
 
 clean:
-	${RM} ${SRCS_DIR}*.o
-	${RM} ${B_SRCS_DIR}*.o
 	$(MAKE) -C ./libft clean
 
-fclean:	clean
+fclean:
 	${RM} ${CLIENT} ${SERVER}
+	${RM} ${B_CLIENT} ${B_SERVER}
 	$(MAKE) -C ./libft fclean
 
 bonus:	${B_NAME}
