@@ -11,28 +11,26 @@
 # **************************************************************************** #
 
 SRCS_DIR	:= source/
-SRCS		:= client.c \
-				server.c
-SRCS		:= $(addprefix $(SRCS_DIR), $(SRCS))
-OBJS		:= ${SRCS:.c=.o}
+C_SRCS		:= client.c
+S_SRCS		:= server.c
+C_SRCS		:= $(addprefix $(SRCS_DIR), $(C_SRCS))
+S_SRCS		:= $(addprefix $(SRCS_DIR), $(S_SRCS))
 
-HEADERS 	:=	./includes/solong.h \
 NAME		:= minitalk
+CLIENT		:= client
+SERVER		:= server
 
 B_SRCS_DIR	:= bonus/
-B_SRCS		:= client_bonus.c \
-				server_bonus.c
-B_SRCS		:= $(addprefix $(B_SRCS_DIR), $(B_SRCS))
-B_OBJS		:= ${B_SRCS:.c=.o}
+B_C_SRCS		:= client_bonus.c
+B_S_SRCS		:= server_bonus.c
+B_C_SRCS		:= $(addprefix $(SRCS_DIR), $(C_SRCS))
+B_S_SRCS		:= $(addprefix $(SRCS_DIR), $(S_SRCS))
 
-B_INCLDIR	:=	-I ./bonus/includes
-B_HEADERS	:=	./bonus/includes/solong_bonus.h \
-				./bonus/includes/math_utils_bonus.h
-B_NAME		:=	solong_bonus
+B_NAME		:=	minitalk_bonus
+B_CLIENT	:= client_bonus
+B_SERVER	:= server_bonus
 
 LIBFT		:= ./libft/libft.a
-
-INCLDIR			:= -I ./includes
 LIBFT_INCLDIR	:= -I ./libft
 PF_INCLDIR		:= -I ./libft/ft_printf_includes
 
@@ -42,30 +40,35 @@ CFLAGS		:= -Wall -Wextra -Werror
 
 all:		${NAME}
 
-${OBJS}:	${SRCS_DIR}%.o : ${SRCS_DIR}%.c
-	${CC} ${CFLAGS} ${INCLDIR} ${LIBFT_INCLDIR} ${PF_INCLDIR} -c $< -o $@
+${NAME}:	${CLIENT} ${SERVER}
 
-${NAME}:	${OBJS} ${HEADERS} ${LIBFT}
-	${CC} ${CFLAGS} ${OBJS} -o ${NAME} ${LIBFT}
+${CLIENT}:	${C_SRCS} ${LIBFT}
+	${CC} ${CFLAGS} ${LIBFT_INCLDIR} ${PF_INCLDIR} ${C_SRCS} -o ${CLIENT} ${LIBFT}
+
+${SERVER}:	${S_SRCS} ${LIBFT}
+	${CC} ${CFLAGS} ${LIBFT_INCLDIR} ${PF_INCLDIR} ${S_SRCS} -o ${SERVER} ${LIBFT}
 
 ${LIBFT}:
 	$(MAKE) -C ./libft
 
 clean:
-	${RM} ${OBJS} ${B_OBJS}
+	${RM} ${SRCS_DIR}*.o
+	${RM} ${B_SRCS_DIR}*.o
 	$(MAKE) -C ./libft clean
 
 fclean:	clean
-	${RM} ${NAME} ${B_NAME}
+	${RM} ${CLIENT} ${SERVER}
 	$(MAKE) -C ./libft fclean
 
-${B_OBJS}:	${B_SRCS_DIR}%.o : ${B_SRCS_DIR}%.c
-	${CC} ${CFLAGS} ${B_INCLDIR} ${LIBFT_INCLDIR} ${PF_INCLDIR} -c $< -o $@
-
-${B_NAME}:	${B_OBJS} ${B_HEADERS} ${LIBFT}
-	${CC} ${CFLAGS} ${B_OBJS} -o ${B_NAME} ${LIBFT}
-
 bonus:	${B_NAME}
+
+${B_NAME}:	${B_CLIENT} ${B_SERVER}
+
+${B_CLIENT}:	${B_C_SRCS} ${LIBFT}
+	${CC} ${CFLAGS} ${LIBFT_INCLDIR} ${PF_INCLDIR} ${B_C_SRCS} -o ${B_CLIENT} ${LIBFT}
+
+${B_SERVER}:	${B_S_SRCS} ${LIBFT}
+	${CC} ${CFLAGS} ${LIBFT_INCLDIR} ${PF_INCLDIR} ${B_S_SRCS} -o ${B_SERVER} ${LIBFT}
 
 re:		fclean all
 
