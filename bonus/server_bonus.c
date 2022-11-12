@@ -6,7 +6,7 @@
 /*   By: asasada <asasada@student.42tokyo.j>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 15:17:39 by asasada           #+#    #+#             */
-/*   Updated: 2022/11/12 19:35:20 by asasada          ###   ########.fr       */
+/*   Updated: 2022/11/12 19:55:17 by asasada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <unistd.h>
 #include "libft.h"
 #include "ft_printf.h"
-
-#define U_SECS 50
 
 static volatile sig_atomic_t	g_c_pid;
 
@@ -36,12 +34,8 @@ static void	handler(int sig, siginfo_t *siginfo, void *ucontext)
 		len = 0;
 	}
 	if (siginfo->si_pid != 0)
-	{
 		g_c_pid = siginfo->si_pid;
-		kill(g_c_pid, SIGUSR1);
-	}
-	else
-		kill(g_c_pid, SIGUSR1);
+	kill(g_c_pid, SIGUSR1);
 }
 
 int	main(void)

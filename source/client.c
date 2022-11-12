@@ -6,7 +6,7 @@
 /*   By: asasada <asasada@student.42tokyo.j>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 15:17:41 by asasada           #+#    #+#             */
-/*   Updated: 2022/11/12 19:35:36 by asasada          ###   ########.fr       */
+/*   Updated: 2022/11/12 20:00:27 by asasada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	send_message(pid_t pid, char *message)
 {
 	int	i;
 
-	while (1)
+	while (*message != '\0')
 	{
 		i = 0;
 		while (i < 8)
@@ -33,13 +33,11 @@ static void	send_message(pid_t pid, char *message)
 				kill(pid, SIGUSR2);
 			i++;
 		}
-		if (*message == '\0')
-			return ;
 		message++;
 	}
 }
 
-int	parse_pid(char *str)
+static int	parse_pid(char *str)
 {
 	if (str == NULL || *str == '\0')
 		return (-1);
